@@ -9,25 +9,6 @@ def create_user_profile(sender, instance, created, **kwargs):
         from .models import UserProfile
         UserProfile.objects.create(user=instance)
 
-# Update posts count when Post is created/deleted
-@receiver(post_save)
-def update_posts_count_on_create(sender, instance, created, **kwargs):
-    app_label = getattr(sender, '__module__', '').split('.')[0]
-    if app_label == 'posts' and sender.__name__ == 'Post':
-        profile = getattr(instance.author, 'profile', None)
-        if profile:
-            profile.posts_count = sender.objects.filter(author=instance.author).count()
-            profile.save(update_fields=['posts_count'])
-
-@receiver(post_delete)
-def update_posts_count_on_delete(sender, instance, **kwargs):
-    app_label = getattr(sender, '__module__', '').split('.')[0]
-    if app_label == 'posts' and sender.__name__ == 'Post':
-        profile = getattr(instance.author, 'profile', None)
-        if profile:
-            profile.posts_count = sender.objects.filter(author=instance.author).count()
-            profile.save(update_fields=['posts_count'])
-
 # Update follower/following counters on follow create/delete
 @receiver(post_save)
 def update_follow_counts_on_create(sender, instance, created, **kwargs):

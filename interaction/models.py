@@ -14,7 +14,7 @@ class Like(models.Model):
         indexes = [models.Index(fields=['post']), models.Index(fields=['user'])]
 
     def __str__(self):
-        return f'{self.user} liked {Post.id}'
+        return f'{self.user} liked Post {self.post.id}'
 
 
 class Comment(models.Model):
@@ -25,4 +25,4 @@ class Comment(models.Model):
     is_active = models.BooleanField(default=True)  # for soft delete if wanted
 
     def __str__(self):
-        return f'Comment {Post.id} by {self.user}'
+        return f'Comment on Post {self.post.id} by {self.user}'

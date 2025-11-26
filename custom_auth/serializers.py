@@ -41,4 +41,6 @@ class LogoutSerializer(serializers.Serializer):
             token = RefreshToken(self.token)
             token.blacklist()
         except Exception:
-            self.fail("bad_token")
+            token.blacklist()
+        except Exception:
+            raise serializers.ValidationError("Invalid or expired token")
